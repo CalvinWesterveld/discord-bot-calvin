@@ -5,44 +5,14 @@ const Discord = require("discord.js");
 // some might call it `cootchie`. Either way, when you see `client.something`, or `bot.something`,
 // this is what we're refering to. Your client.
 const client = new Discord.Client();
-const config = require("./config.json");
-const serverStats = {
-	guildID: '600455433471393812',
-	totalUsersID: '600455252759805967',
-	memberCountID: '571752357059100674',
-};
+
+const config = require("config.json");
 
 client.on("ready", () => {
-  // This event will run if the bot starts, and logs in, successfully.
-  console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`);
-  // Example of changing the bot's playing game to something useful. `client.user` is what the
-  // docs refer to as the "ClientUser".
   client.user.setActivity(`ShadowWarriors Clan`);
 });
 
-client.on('guildMemberAdd', member => {
-	if (member.guild.id !== serverStats.guildID) return;
-	client.channels.get(serverStats.totalUsersID).setName(`Total Users : ${member.guild.memberCount}`);
-	client.channels.get(serverStats.memberCountID).setName(`Total Members : ${member.guild.members.filter(m => !m.user.bot).size}`);
-});
 
-client.on('guildMemberRemove', member => {
-	if (member.guild.id !== serverStats.guildID) return;
-	client.channels.get(serverStats.totalUsersID).setName(`Total Users : ${member.guild.memberCount}`);
-	client.channels.get(serverStats.memberCountID).setName(`Total Members : ${member.guild.members.filter(m => !m.user.bot).size}`);
-});
-
-client.on("guildCreate", guild => {
-  // This event triggers when the bot joins a guild.
-  console.log(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`);
-  client.user.setActivity(`ShadowWarriors Clan`);
-});
-
-client.on("guildDelete", guild => {
-  // this event triggers when the bot is removed from a guild.
-  console.log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
-  client.user.setActivity(`ShadowWarriors Clan`);
-});
 
 client.on('guildMemberAdd', member => {
     let channel = member.guild.channels.find('name', 'welcome');
