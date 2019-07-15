@@ -6,7 +6,7 @@ const Discord = require("discord.js");
 // this is what we're refering to. Your client.
 const client = new Discord.Client();
 
-const config = require("config.json");
+const config = require("./config.json");
 
 client.on("ready", () => {
   client.user.setActivity(`ShadowWarriors Clan`);
