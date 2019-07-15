@@ -6,14 +6,9 @@ const Discord = require("discord.js");
 // this is what we're refering to. Your client.
 const client = new Discord.Client();
 
-// Here we load the config.json file that contains our token and our prefix values.
-const config = require("./config.json");
-// config.token contains the bot's token
-// config.prefix contains the message prefix.
-
 const serverStats = {
-	guildID: '600081501513842701',
-	totalUsersID: '600081501513842702',
+	guildID: '600455433471393812',
+	totalUsersID: '600455252759805967',
 	memberCountID: '571752357059100674',
 };
 
@@ -22,7 +17,7 @@ client.on("ready", () => {
   console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`);
   // Example of changing the bot's playing game to something useful. `client.user` is what the
   // docs refer to as the "ClientUser".
-  client.user.setActivity(`https://www.bukehosting.nl/`);
+  client.user.setActivity(`ShadowWarriors Clan`);
 });
 
 client.on('guildMemberAdd', member => {
@@ -40,13 +35,13 @@ client.on('guildMemberRemove', member => {
 client.on("guildCreate", guild => {
   // This event triggers when the bot joins a guild.
   console.log(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`);
-  client.user.setActivity(`https://www.bukehosting.nl/`);
+  client.user.setActivity(`ShadowWarriors Clan`);
 });
 
 client.on("guildDelete", guild => {
   // this event triggers when the bot is removed from a guild.
   console.log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
-  client.user.setActivity(`https://www.bukehosting.nl/`);
+  client.user.setActivity(`ShadowWarriors Clan`);
 });
 
 client.on('guildMemberAdd', member => {
@@ -199,4 +194,4 @@ client.on("message", async message => {
   }
 });
 
-client.login(config.token);
+client.login(process.env.BOT_TOKEN);
