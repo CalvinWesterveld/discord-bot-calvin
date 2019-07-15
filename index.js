@@ -5,7 +5,7 @@ const Discord = require("discord.js");
 // some might call it `cootchie`. Either way, when you see `client.something`, or `bot.something`,
 // this is what we're refering to. Your client.
 const client = new Discord.Client();
-
+const config = require("./config.json");
 const serverStats = {
 	guildID: '600455433471393812',
 	totalUsersID: '600455252759805967',
