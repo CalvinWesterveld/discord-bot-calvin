@@ -8,8 +8,42 @@ const client = new Discord.Client();
 
 const config = require("./config.json");
 
+const serverStats = {
+	guildID: '600455433471393812',
+	totalUsersID: '600455252759805967',
+	memberCountID: '600455338868604938',
+};
+
 client.on("ready", () => {
+  // This event will run if the bot starts, and logs in, successfully.
   console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`);
+  // Example of changing the bot's playing game to something useful. `client.user` is what the
+  // docs refer to as the "ClientUser".
+  client.user.setActivity(`ShaddowWarrior`);
+});
+
+client.on('guildMemberAdd', member => {
+	if (member.guild.id !== serverStats.guildID) return;
+	client.channels.get(serverStats.totalUsersID).setName(`Total Users : ${member.guild.memberCount}`);
+	client.channels.get(serverStats.memberCountID).setName(`Total Members : ${member.guild.members.filter(m => !m.user.bot).size}`);
+});
+
+client.on('guildMemberRemove', member => {
+	if (member.guild.id !== serverStats.guildID) return;
+	client.channels.get(serverStats.totalUsersID).setName(`Total Users : ${member.guild.memberCount}`);
+	client.channels.get(serverStats.memberCountID).setName(`Total Members : ${member.guild.members.filter(m => !m.user.bot).size}`);
+});
+
+client.on("guildCreate", guild => {
+  // This event triggers when the bot joins a guild.
+  console.log(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`);
+  client.user.setActivity(`ShaddowWarrior`);
+});
+
+client.on("guildDelete", guild => {
+  // this event triggers when the bot is removed from a guild.
+  console.log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
+  client.user.setActivity(`ShaddowWarrior`);
 });
 
 
