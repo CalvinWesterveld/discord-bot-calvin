@@ -112,7 +112,7 @@ client.on("message", async message => {
   
   if (foundInText) {
 	  message.delete();
-	  message.channel.send('Sorry ${message.author}, that word is blacklisted!');
+	  message.channel.send('Sorry ${message.author} that word is blacklisted!');
   }
   // It's good practice to ignore other bots. This also makes your bot ignore itself
   // and not get into a spam loop (we call that "botception").
