@@ -95,6 +95,185 @@ client.on('guildMemberRemove', member => {
     console.log("Leave Message Sent")
 });
 
+client.on('messageDelete', message => {
+    if (message.channel.name.toLowerCase().match(/verify/)) return;
+    var channel = client.guilds.get(message.guild.id).channels.find(channel => channel.name.toLowerCase().match(/staff-loggs/))
+    channel.send({
+        "embed": {
+            "title": "Delete",
+            "description": "A message has been deleted.",
+            "color": 1409939,
+            "fields": [
+                {
+                    "name": "Username",
+                    "value": `<@${message.author.id}> (${message.author.id})`,
+                    "inline": true
+                },
+                {
+                    "name": "From",
+                    "value": `<#${message.channel.id}> (${message.channel.name})`,
+                    "inline": true
+                },
+                {
+                    "name": "Time",
+                    "value": `${new Date()}`,
+                    "inline": true
+                },
+                {
+                    "name": "Message",
+                    "value": `${message.content || '(was waarschijnlijk een embed wat niet vertoonbaar is)'}`
+                }
+            ],
+            "thumbnail": {
+                "url": `${message.author.avatarURL || 'https://cdn.discordapp.com/embed/avatars/0.png'}`
+            }
+        }
+    })
+});
+
+client.on('messageUpdate', (omsg, nmsg) => {
+    if (omsg.type != 'text') return;
+
+    const channel = client.guilds.get(nmsg.guild.id).channels.find(channel => channel.name.toLowerCase().match(/staff-loggs/))
+    const adminRole = nmsg.guild.roles.find(role => role.name.toLowerCase().match(/management/)).id
+    const notAllowed = [ 'http://', 'discord.gg', 'cancer', 'kanker', 'tyfus', 'fuck', 'kut', 'aids', 'jezus', 'godver' ]
+
+    if (!nmsg.member.roles.has(adminRole) && notAllowed.some(word => nmsg.content.includes(word))) {
+        nmsg.delete()
+        channel.send({
+            "embed": {
+                "title": "Auto delete",
+                "description": "A message has been deleted.",
+                "color": 1409939,
+                "fields": [
+                    {
+                        "name": "Deleted by",
+                        "value": `<@${client.user.id}>`,
+                        "inline": true
+                    },
+                    {
+                        "name": "Username",
+                        "value": `<@${nmsg.author.id}> (${nmsg.author.id})`,
+                        "inline": true
+                    },
+                    {
+                        "name": "From",
+                        "value": `<#${nmsg.channel.id}> (${nmsg.channel.name})`,
+                        "inline": true
+                    },
+                    {
+                        "name": "Time",
+                        "value": `${new Date()}`,
+                        "inline": true
+                    },
+                    {
+                        "name": "Message",
+                        "value": `${nmsg.content || '(was waarschijnlijk een embed wat niet vertoonbaar is)'}`
+                    }
+                ],
+                "thumbnail": {
+                    "url": `${nmsg.author.avatarURL || 'https://cdn.discordapp.com/embed/avatars/0.png'}`
+                }
+            }
+        })
+    } else if (!nmsg.author.bot) {
+        if (omsg.content.length > 1000) {
+            omsg.content = omsg.content.substring(0, 1000)
+            omsg.content += '...'
+        }
+        if (nmsg.content.length > 1000) {
+            nmsg.content = nmsg.content.substring(0, 1000)
+            nmsg.content += '...'
+        }
+        channel.send({
+            "embed": {
+                "title": "Message edit",
+                "description": "A message has been edited.",
+                "color": 1409939,
+                "fields": [
+                    {
+                        "name": "Username",
+                        "value": `<@${nmsg.author.id}> (${nmsg.author.id})`,
+                        "inline": true
+                    },
+                    {
+                        "name": "From",
+                        "value": `<#${nmsg.channel.id}> (${nmsg.channel.name})`,
+                        "inline": true
+                    },
+                    {
+                        "name": "Time",
+                        "value": `${new Date()}`,
+                        "inline": true
+                    },
+                    {
+                        "name": "Old message",
+                        "value": `${omsg.content || '(was waarschijnlijk een embed wat niet vertoonbaar is)'}`
+                    },
+                    {
+                        "name": "New message",
+                        "value": `${nmsg.content || '(was waarschijnlijk een embed wat niet vertoonbaar is)'}`
+                    }
+                ],
+                "thumbnail": {
+                    "url": `${nmsg.author.avatarURL || 'https://cdn.discordapp.com/embed/avatars/0.png'}`
+                }
+            }
+        })
+    }
+})
+
+client.on('message', async (message) => {
+    if (message.author.bot) return
+    if (message.channel.name == undefined) return
+
+    const logchannel = client.guilds.get(message.guild.id).channels.find(channel => channel.name.toLowerCase().match(/staff-loggs/))
+
+    const notAllowed = [ 'http://', 'discord.gg', 'cancer', 'kanker', 'tyfus', 'fuck', 'kut', 'aids', 'jezus', 'godver' ]
+    const adminRole = message.guild.roles.find(role => role.name.toLowerCase().match(/management/)).id
+
+    if (!message.member.roles.has(adminRole))
+        if (notAllowed.some(word => message.content.includes(word))) {
+            message.delete()
+            logchannel.send({
+                "embed": {
+                    "title": "Auto delete",
+                    "description": "A message has been deleted.",
+                    "color": 1409939,
+                    "fields": [
+                        {
+                          "name": "Deleted by",
+                          "value": `<@${client.user.id}>`,
+                          "inline": true
+                        },
+                        {
+                            "name": "Username",
+                            "value": `<@${message.author.id}> (${message.author.id})`,
+                            "inline": true
+                        },
+                        {
+                            "name": "From",
+                            "value": `<#${message.channel.id}> (${message.channel.name})`,
+                            "inline": true
+                        },
+                        {
+                            "name": "Time",
+                            "value": `${new Date()}`,
+                            "inline": true
+                        },
+                        {
+                            "name": "Message",
+                            "value": `${message.content}`
+                        }
+                    ],
+                    "thumbnail": {
+                        "url": `${message.author.avatarURL || 'https://cdn.discordapp.com/embed/avatars/0.png'}`
+                    }
+                }
+            })
+        }
+
+
 
 client.on("message", async message => {
   // This event will run on every single message received, from any channel or DM.
