@@ -97,60 +97,23 @@ client.on('guildMemberRemove', member => {
 
 
 
-client.on('message', async (message) => {
-    if (message.author.bot) return
-    if (message.channel.name == undefined) return
-
-    const logchannel = client.guilds.get(message.guild.id).channels.find(channel => channel.name.toLowerCase().match(/staff-loggs/))
-
-    const notAllowed = [ 'http://', 'discord.gg', 'cancer', 'kanker', 'tyfus', 'fuck', 'kut', 'aids', 'jezus', 'godver' ]
-    const adminRole = message.guild.roles.find(role => role.name.toLowerCase().match(/management/)).id
-
-    if (!message.member.roles.has(adminRole))
-        if (notAllowed.some(word => message.content.includes(word))) {
-            message.delete()
-            logchannel.send({
-                "embed": {
-                    "title": "Auto delete",
-                    "description": "A message has been deleted.",
-                    "color": 1409939,
-                    "fields": [
-                        {
-                          "name": "Deleted by",
-                          "value": `<@${client.user.id}>`,
-                          "inline": true
-                        },
-                        {
-                            "name": "Username",
-                            "value": `<@${message.author.id}> (${message.author.id})`,
-                            "inline": true
-                        },
-                        {
-                            "name": "From",
-                            "value": `<#${message.channel.id}> (${message.channel.name})`,
-                            "inline": true
-                        },
-                        {
-                            "name": "Time",
-                            "value": `${new Date()}`,
-                            "inline": true
-                        },
-                        {
-                            "name": "Message",
-                            "value": `${message.content}`
-                        }
-                    ],
-                    "thumbnail": {
-                        "url": `${message.author.avatarURL || 'https://cdn.discordapp.com/embed/avatars/0.png'}`
-                    }
-                }
-            });
 
 
 
 client.on("message", async message => {
   // This event will run on every single message received, from any channel or DM.
 
+	
+  let blacklisted = ['Testingshit'];
+  let foundInText = false;
+  for (var i in blacklisted) {
+  	if (message.content.toLowerCase().includes(blacklisted[i].toLowerCase())) foundInText = true;
+  }
+  
+  if (foundInText) {
+	  message.delete();
+	  message.channel.send('Sorry, that word is blacklisted!');
+  }
   // It's good practice to ignore other bots. This also makes your bot ignore itself
   // and not get into a spam loop (we call that "botception").
   if(message.author.bot) return;
