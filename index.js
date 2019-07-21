@@ -95,41 +95,6 @@ client.on('guildMemberRemove', member => {
     console.log("Leave Message Sent")
 });
 
-client.on('messageDelete', message => {
-    if (message.channel.name.toLowerCase().match(/verify/)) return;
-    var channel = client.guilds.get(message.guild.id).channels.find(channel => channel.name.toLowerCase().match(/staff-loggs/))
-    channel.send({
-        "embed": {
-            "title": "Delete",
-            "description": "A message has been deleted.",
-            "color": 1409939,
-            "fields": [
-                {
-                    "name": "Username",
-                    "value": `<@${message.author.id}> (${message.author.id})`,
-                    "inline": true
-                },
-                {
-                    "name": "From",
-                    "value": `<#${message.channel.id}> (${message.channel.name})`,
-                    "inline": true
-                },
-                {
-                    "name": "Time",
-                    "value": `${new Date()}`,
-                    "inline": true
-                },
-                {
-                    "name": "Message",
-                    "value": `${message.content || '(was waarschijnlijk een embed wat niet vertoonbaar is)'}`
-                }
-            ],
-            "thumbnail": {
-                "url": `${message.author.avatarURL || 'https://cdn.discordapp.com/embed/avatars/0.png'}`
-            }
-        }
-    })
-});
 
 client.on('messageUpdate', (omsg, nmsg) => {
     if (omsg.type != 'text') return;
@@ -221,7 +186,7 @@ client.on('messageUpdate', (omsg, nmsg) => {
             }
         })
     }
-})
+});
 
 client.on('message', async (message) => {
     if (message.author.bot) return
@@ -270,8 +235,7 @@ client.on('message', async (message) => {
                         "url": `${message.author.avatarURL || 'https://cdn.discordapp.com/embed/avatars/0.png'}`
                     }
                 }
-            })
-        }
+            });
 
 
 
