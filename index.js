@@ -104,7 +104,7 @@ client.on("message", async message => {
   // This event will run on every single message received, from any channel or DM.
 
 	
-  let blacklisted = ['Testingshit'];
+  let blacklisted = ['Kanker', 'Tering', 'Cancer', 'Aids'];
   let foundInText = false;
   for (var i in blacklisted) {
   	if (message.content.toLowerCase().includes(blacklisted[i].toLowerCase())) foundInText = true;
@@ -112,7 +112,7 @@ client.on("message", async message => {
   
   if (foundInText) {
 	  message.delete();
-	  message.channel.send('Sorry, that word is blacklisted!');
+	  message.channel.send('Sorry ${message.author}, that word is blacklisted!');
   }
   // It's good practice to ignore other bots. This also makes your bot ignore itself
   // and not get into a spam loop (we call that "botception").
